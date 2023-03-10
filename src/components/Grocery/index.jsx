@@ -3,11 +3,13 @@ import '../styles/newForm.css'
 import { useNavigate } from 'react-router-dom';
 import {Box, Button, Grid,Table,
         TableBody,TableCell,TableContainer,
-        TableHead,TableRow,Paper }
+        TableHead,TableRow,Paper,
+        Modal,
+      }
         from "@mui/material";
 import axios from 'axios'
 import PropTypes from 'prop-types';
-
+import ModalAddtoCart from '../recordDetailpage/ModalAddToCart';
 
 const getGroceryURL = `${process.env.REACT_APP_API_KEY}/getProductData`;
 const DeletegetGroceryURL = `${process.env.REACT_APP_API_KEY}/deleteProductData?code=`;
@@ -62,13 +64,11 @@ function Grocery() {
 
   const navigate =useNavigate()
 
-  const [groceryItemsPerPage, setGroceryItemsPerPage] = useState(2);
-  const [groceryPerPage, setGroceryPerPage] = useState(1);
-  const [groceryNoOfPages, setGroceryNoOfPages] = useState()
+
 
   const[records,setRecords]=useState([])
-  const[selectedRow,setSelectedRow]=useState()
-
+const[modalShowBill,setModalmodalShowBill]=useState(false)
+const[addCartRecord,setAddCartRecord]=useState()
 
   useEffect(()=>{
     fetchRecords();
@@ -80,23 +80,10 @@ function Grocery() {
     .then((res)=>{
       console.log(res,"api res")
       setRecords(res.data)
-       setGroceryNoOfPages(Math.ceil(res.data.length / groceryItemsPerPage))
-
-
     })
     .catch((err)=>{
       console.log(err)
     })
-  }
-
-
-
-  const handleOnCellClick = (e, value) => {
-    console.log(value)
-     navigate("/groceryDetailPage", {state:{ record: {value} }})
-  }
-  const onHandleDelete = (e, value) => {
-    console.log(value)
   }
 
 
@@ -105,38 +92,22 @@ function Grocery() {
     navigate("/groceryDetailPage", {state:{ record: {} }})
   };
 
-  const handleChangeBookPage=(e,value)=>{
-    setGroceryPerPage(value);
-  }
-
-
-  
-  const handleBookCardEdit = (row) => {
-    console.log('selected record', row);
-    const item = row;
-    navigate("/bookdetailpage", { state: { record: { item } } })
-  };
-
-  const handleBookCardDelete = (e,row) => {
-console.log(row)
-    axios.post(DeletegetGroceryURL+row._id)
-    .then((res)=>{
-      console.log(res)
-      fetchRecords()
-
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
-   
-  }
 
   const handleOnRowClick =(item)=>{
     console.log(item,"handleOnRowClick")
-
     navigate("/groceryDetailPage", { state: { record: { item } } })
   }
 
+  const handleAddCart=(item)=>{
+    console.log(item,"handleAddCart")
+    setAddCartRecord(item)
+    setModalmodalShowBill(true)
+  }
+
+  const handleModalShowBillModalClose=()=>{
+    setModalmodalShowBill(false)
+    fetchRecords()
+  }
 
 
   return (
@@ -176,7 +147,7 @@ console.log(row)
             <TableRow
               key={row._id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              onClick={()=>handleOnRowClick(row)}
+           
             >
               <TableCell component="th" scope="row">
                 {index+1}
@@ -185,7 +156,8 @@ console.log(row)
               <TableCell align="left">{row.category}</TableCell>
               <TableCell align="left">{row.price}</TableCell>
               <TableCell align="center">{row.quantity}</TableCell>
-              <TableCell align="center"> <button>Add to Cart</button> </TableCell>
+              <TableCell align="right"> <button  className="edit__button"  onClick={()=>handleOnRowClick(row)} >Edit</button> </TableCell>
+              <TableCell align="right"> <button  className="add-to-cart__button" onClick={()=>handleAddCart(row)} >Add to Cart</button> </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -199,6 +171,18 @@ console.log(row)
       </Box>
     </div>
    
+    <Modal
+        open={modalShowBill}
+        onClose={handleModalShowBillModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{ backdropFilter: "blur(2px)" }}
+      >
+        <Box sx={ModalStyle}>
+          <ModalAddtoCart data={addCartRecord}  handleModal={handleModalShowBillModalClose} />
+        </Box>
+      </Modal>
+
     </>
   )
 }
