@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import '../styles/newForm.css'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {Box, Button, Grid,Table,
         TableBody,TableCell,TableContainer,
         TableHead,TableRow,Paper,
@@ -89,13 +89,15 @@ const[addCartRecord,setAddCartRecord]=useState()
 
   const handleAddRecord = () => {
     console.log('inside new record')
-    navigate("/groceryDetailPage", {state:{ record: {} }})
+    
+    navigate(`/new-grocery`, {state:{ record: {} }})
   };
 
 
   const handleOnRowClick =(item)=>{
     console.log(item,"handleOnRowClick")
-    navigate("/groceryDetailPage", { state: { record: { item } } })
+    // <Link to={`groceryDetailPage/${item._id}`}/>
+    navigate(`/groceryDetailPage/${item._id}`, { state: { record: { item } } })
   }
 
   const handleAddCart=(item)=>{
@@ -156,7 +158,7 @@ const[addCartRecord,setAddCartRecord]=useState()
               <TableCell align="left">{row.category}</TableCell>
               <TableCell align="left">{row.price}</TableCell>
               <TableCell align="center">{row.quantity}</TableCell>
-              <TableCell align="right"> <button  className="edit__button"  onClick={()=>handleOnRowClick(row)} >Edit</button> </TableCell>
+              <TableCell align="right"> <button  className="edit__button"  onClick={()=>handleOnRowClick(row)}> Edit</button> </TableCell>
               <TableCell align="right"> <button  className="add-to-cart__button" onClick={()=>handleAddCart(row)} >Add to Cart</button> </TableCell>
             </TableRow>
           ))}
