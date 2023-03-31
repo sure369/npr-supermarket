@@ -7,9 +7,7 @@ import { Link, NavLink } from "react-router-dom"
 const pages = [
   { title: 'Grocery', toNav: '/grocery' },
   { title: 'Bill', toNav: '/bill' },
-  { title: 'about', toNav: '/about' }
 ];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -31,10 +29,9 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static" sx={{ bgcolor: "white" }}>
+    <AppBar position="static" sx={{ bgcolor: "#3C1A5B" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -46,7 +43,7 @@ function ResponsiveAppBar() {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'black',
+              color: '#FFF748',
               textDecoration: 'none',
             }}
           >
@@ -60,7 +57,7 @@ function ResponsiveAppBar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="black"
+              color="#FFF748"
             >
               <MenuIcon />
             </IconButton>
@@ -97,7 +94,6 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -110,7 +106,7 @@ function ResponsiveAppBar() {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'black',
+              color: '#FFF748',
               textDecoration: 'none',
             }}
           >
@@ -129,7 +125,7 @@ function ResponsiveAppBar() {
                 <Link to={page.toNav}
                   style={{ textDecoration: 'none', color: 'unset' }}
                 >
-                  <Typography sx={{color:'black'}}>{page.title} </Typography>
+                  <Typography sx={{color:'#FFF748'}}>{page.title} </Typography>
                 </Link>
               </MenuItem>
             ))}

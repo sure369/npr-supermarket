@@ -99,7 +99,7 @@ const GroceryDetailPage = ({ item }) => {
               <>
                 <div className='form_center_box'>
 
-                  <Box m="auto">
+                  <Box m="auto" sx={{ bgcolor: '#FBEAEB'}}>
                     <Form>
                       <Grid container spacing={2}>
                         <Grid item xs={6} md={6}>

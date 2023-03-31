@@ -5,11 +5,14 @@ import {Box, Button, Grid,Table,
         TableBody,TableCell,TableContainer,
         TableHead,TableRow,Paper,
         Modal,
+        IconButton,
       }
         from "@mui/material";
 import axios from 'axios'
 import PropTypes from 'prop-types';
 import ModalAddtoCart from '../recordDetailpage/ModalAddToCart';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 const getGroceryURL = `${process.env.REACT_APP_API_KEY}/getProductData`;
 const DeletegetGroceryURL = `${process.env.REACT_APP_API_KEY}/deleteProductData?code=`;
@@ -86,7 +89,18 @@ const[addCartRecord,setAddCartRecord]=useState()
     })
   }
 
+const handelRowDelete =(item)=>{
 
+  console.log(item,"delete")
+  axios.post(DeletegetGroceryURL+item._id)
+  .then(res=>{
+    console.log(res.data,"api delete")
+    fetchRecords()
+  })
+  .catch(err=>{
+    console.log(err,"api error")
+  })
+}
   const handleAddRecord = () => {
     console.log('inside new record')
     
@@ -127,13 +141,13 @@ const[addCartRecord,setAddCartRecord]=useState()
 
       <div style={{ width: '100%' }}>
       <Box
-        sx={{ display: 'flex', p: 1, bgcolor: 'background.paper', borderRadius: 1 }}
+        sx={{ display: 'flex', p: 1, bgcolor: '#FBEAEB', borderRadius: 1 }}
       >
        <Grid container>
           <Grid item xs={12} md={12} >
             <Item >
-            <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+      <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Sr.No</TableCell>
@@ -141,6 +155,8 @@ const[addCartRecord,setAddCartRecord]=useState()
             <TableCell align="left">Catagory</TableCell>
             <TableCell align="left">Price</TableCell>
             <TableCell align="center">Stock Quantity</TableCell>
+            <TableCell align="center"></TableCell>
+            <TableCell align="center"></TableCell>
             <TableCell align="center"></TableCell>
           </TableRow>
         </TableHead>
@@ -158,8 +174,16 @@ const[addCartRecord,setAddCartRecord]=useState()
               <TableCell align="left">{row.category}</TableCell>
               <TableCell align="left">{row.price}</TableCell>
               <TableCell align="center">{row.quantity}</TableCell>
+              <TableCell align="right"> <IconButton sx={{color:'red'}}  onClick={()=>handelRowDelete(row)}> <DeleteIcon/></IconButton> </TableCell>
+
               <TableCell align="right"> <button  className="edit__button"  onClick={()=>handleOnRowClick(row)}> Edit</button> </TableCell>
-              <TableCell align="right"> <button  className="add-to-cart__button" onClick={()=>handleAddCart(row)} >Add to Cart</button> </TableCell>
+              {
+                row.quantity>0 &&  <TableCell align="right"> <button  className="add-to-cart__button" onClick={()=>handleAddCart(row)} >Add to Cart</button> </TableCell>
+
+              }
+
+
+             
             </TableRow>
           ))}
         </TableBody>
